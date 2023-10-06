@@ -463,7 +463,6 @@ def create_NFO(JAVMetadata, directory):
     f.write(indent + create_with_tag('originaltitle', JAVMetadata.original_title))
     f.write('\n')
     #add set tag
-    ### may potentially cause issues if nil, needs testing
     f.write(indent + '<set>')
     f.write('\n')
     f.write(indent + indent + create_with_tag('name', JAVMetadata.set))
@@ -577,7 +576,6 @@ def create_with_tag(tag, value):
         return f'<{tag}/>'
 
 if __name__ == '__main__':
-    #logging.basicConfig(filename=f'{datetime.now().strftime("%d-%m-%Y_%H%M%S")}.log', encoding='utf-8', level=logging.NOTSET, force=True)
     log = logging.getLogger('')
     log.setLevel(logging.DEBUG)
     format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -596,8 +594,6 @@ if __name__ == '__main__':
     logging.info('')
 
     # directory/folder path
-    #dir_path = r'/Volumes/media/JAVUncensored/'
-    #dir_path = r'/Users/redbull/Documents/Test/'
     dir_path = input("Enter Your Directory: ")
     while not os.path.exists((dir_path)):
         print(f'Directory "{dir_path}" does not exist')
