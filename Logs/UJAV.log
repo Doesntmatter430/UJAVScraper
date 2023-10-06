@@ -1,0 +1,13 @@
+2023-10-06 01:58:17,926 - root - INFO - Getting Caribbean metadata for code 121223-001
+2023-10-06 01:58:18,069 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): en.caribbeancom.com:443
+2023-10-06 01:58:18,500 - urllib3.connectionpool - DEBUG - https://en.caribbeancom.com:443 "GET /eng/moviepages/121223-001/index.html HTTP/1.1" 302 None
+2023-10-06 01:58:18,592 - urllib3.connectionpool - DEBUG - https://en.caribbeancom.com:443 "GET /eng/404.html HTTP/1.1" 200 None
+2023-10-06 01:58:18,666 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.caribbeancom.com:443
+2023-10-06 01:58:19,069 - urllib3.connectionpool - DEBUG - https://www.caribbeancom.com:443 "GET /moviepages/121223-001/index.html HTTP/1.1" 403 None
+2023-10-06 01:58:19,172 - root - ERROR - Failed to get movie info
+2023-10-06 01:58:19,176 - root - ERROR - Failed to get results for carib-121223-001
+2023-10-06 01:58:19,177 - root - INFO - 
+2023-10-06 01:58:19,177 - root - INFO - ============================================
+2023-10-06 01:58:19,177 - root - INFO -      Successfully scraped 0 titles     
+2023-10-06 01:58:19,177 - root - INFO -            Skipped 1 titles     
+2023-10-06 01:58:19,178 - root - INFO - ============================================
