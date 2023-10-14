@@ -57,6 +57,7 @@ class JAVMetadata:
     set = ''
     original_set = ''
     actors_string = ''
+    trailer = ''
     actors = []
     tags = []
     images = []
@@ -76,6 +77,7 @@ class JAVMetadata:
         self.set = ''
         self.original_set = ''
         self.actors_string = ''
+        self.trailer = ''
         self.actors = []
         self.tags = []
         self.images = []
@@ -101,12 +103,14 @@ def get_carib_metadata(code):
 
     #validate title is available in both languages
     if en_soup.find("span", class_="after-link-arrow") is not None:
-        en_expired = True
-        logging.warning("This movie is no longer available in English")
-        if ja_soup.find("span", class_="after-link-arrow"):
-            logging.warning("This movie is no longer available in Japanese")
-            logging.error("Content is not available")
-            return jav, False
+        if en_soup.find("span", class_="after-link-arrow").text.strip() == "This movie is available for a limited time only. Expiration date: --":
+            en_expired = True
+            logging.warning("This movie is no longer available in English")
+            logging.warning(en_url)
+            if ja_soup.find("span", class_="after-link-arrow"):
+                logging.warning("This movie is no longer available in Japanese")
+                logging.error("Content is not available")
+                return jav, False
     if en_expired:
         logging.warning('Using only translated values')
 
@@ -188,11 +192,15 @@ def get_carib_metadata(code):
                 img_url = 'https://en.caribbeancom.com' + "".join(src)
                 jav.images.append(img_url)
 
+    #set trailer
+    jav.trailer = f'https://smovie.caribbeancom.com/sample/movies/{code}/720p.mp4'
+
     #translate title if set to actor names
     ##this is what carib does for untranslated titles
     translator = Translator()
-    if jav.title == jav.actors_string:
-        jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip()
+    if jav.title == jav.actors_string or jav.title == '':
+        if jav.original_title != '':
+            jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip().capitalize()
     #translate description if default for untranslated descriptions
     if jav.original_description != '' and jav.description == "Caribbeancom has the widest selection of best looking Japanese and American girls getting fucked hardcore in every hole.The videos are extremely high quality - up to 4000kbps DVD quality, so it lets you jump right into the action and forget that you're just sitting in front of your computer screen!  With over 1000 titles to choose from and new movies updated 6 times a week, where else would you get your hands on fulfilling fantasy of fucking a petite babe with a tight snatch from the Far East?":
         jav.description = translator.translate(jav.original_description).text.strip()
@@ -217,6 +225,7 @@ def get_carib_metadata(code):
     return jav, True
 
 def get_carib_pr_metadata(code):
+    code = code.replace("-", "_")
     logging.info(f'Getting Caribbean PR metadata for code {code}')
     jav = JAVMetadata
     # for some reason, the arrays don't clear when new data is populated
@@ -248,14 +257,16 @@ def get_carib_pr_metadata(code):
     # set title and original titles
     if en_movie_info.find('h1') is not None:
         jav.title = en_movie_info.find('h1').text.strip()
-    if ja_movie_info.find('h1') is not None:
-        jav.original_title = ja_movie_info.find('h1').text.strip()
+    if ja_movie_info is not None:
+        if ja_movie_info.find('h1') is not None:
+            jav.original_title = ja_movie_info.find('h1').text.strip()
 
     # set descriptions (need to translate later)
     if en_movie_info.find('p') is not None:
         jav.description = en_movie_info.find('p').text.strip()
-    if ja_movie_info.find('p') is not None:
-        jav.original_description = ja_movie_info.find('p').text.strip()
+    if ja_movie_info is not None:
+        if ja_movie_info.find('p') is not None:
+            jav.original_description = ja_movie_info.find('p').text.strip()
 
     movie_spec = en_soup.findAll(class_='spec-content')
     spec_length = len(movie_spec)
@@ -296,11 +307,15 @@ def get_carib_pr_metadata(code):
                 img_url = 'https://en.caribbeancompr.com' + "".join(src)
                 jav.images.append(img_url)
 
+    #set trailer
+    jav.trailer = f"https://smovie.caribbeancompr.com/sample/movies/{code}/480p.mp4"
+
     # translate title if set to actor names
     ##this is what carib does for untranslated titles
     translator = Translator()
     if jav.title == jav.actors_string or jav.title == '':
-        jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip().capitalize()
+        if jav.original_title != '':
+            jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip().capitalize()
     # translate description if default for untranslated descriptions
     if jav.description == "Caribbeancom has the widest selection of best looking Japanese and American girls getting fucked hardcore in every hole.The videos are extremely high quality - up to 4000kbps DVD quality, so it lets you jump right into the action and forget that you're just sitting in front of your computer screen!  With over 1000 titles to choose from and new movies updated 6 times a week, where else would you get your hands on fulfilling fantasy of fucking a petite babe with a tight snatch from the Far East?":
         jav.description = translator.translate(jav.original_description).text.strip()
@@ -314,6 +329,7 @@ def get_carib_pr_metadata(code):
     return jav, True
 
 def get_pondo_metadata(code):
+    code = code.replace("-", "_")
     logging.info(f'Getting 1Pondo metadata for code {code}')
     jav = JAVMetadata
     # for some reason, the arrays don't clear when new data is populated
@@ -386,7 +402,12 @@ def get_pondo_metadata(code):
 
     # set set and original set
     if spec_length > 2:
-        jav.set = movie_spec[2].text.strip()
+        logging.warning(f'movie_spec {movie_spec[2]}')
+        second_spec = movie_spec[2].text.strip()
+        if len(second_spec) == 8 and second_spec[2] == ':' and second_spec[5] == ":":
+            movie_spec.insert(2, "")
+        else:
+            jav.set = second_spec
 
     # set duration
     if spec_length > 3:
@@ -451,7 +472,7 @@ def create_NFO(JAVMetadata, directory):
     f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
     f.write('\n')
     #add UJavScraper identifier
-    f.write(f'<!--created on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - UJAVScraper 0.0.01-->')
+    f.write(f'<!--created on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - UJAVScraper 0.0.0.2-->')
     f.write('\n')
     #add movie tag
     f.write('<movie>')
@@ -555,6 +576,18 @@ def create_NFO(JAVMetadata, directory):
         b.write(bonus)
         b.close()
 
+    #Download trailer
+    if JAVMetadata.trailer != '':
+
+        trailer_name = f"{JAVMetadata.file_name}-trailer"
+        r = get_legacy_session().get(JAVMetadata.trailer, stream=True)
+        with open(os.path.join(directory, f'{JAVMetadata.file_name}-trailer.mp4'), 'wb') as t:
+            for chunk in r.iter_content(chunk_size=1024 * 1024):
+                if chunk:
+                    t.write(chunk)
+        logging.info(f"{trailer_name} downloaded!")
+        t.close()
+
 def write_NFO(JAVMetadata, dir_path):
     new_path = os.path.join(dir_path, JAVMetadata.folder_name)
     if not os.path.exists(new_path):
@@ -577,7 +610,7 @@ def create_with_tag(tag, value):
 
 if __name__ == '__main__':
     log = logging.getLogger('')
-    log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
     format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     ch = logging.StreamHandler(sys.stdout)
@@ -585,11 +618,11 @@ if __name__ == '__main__':
     log.addHandler(ch)
     LOGFILE = f'logs/UJAV.log'
 
-    fh = handlers.TimedRotatingFileHandler(LOGFILE, when='M', backupCount=2)
+    fh = handlers.TimedRotatingFileHandler(LOGFILE, when='M', backupCount=6)
     fh.setFormatter(format)
     log.addHandler(fh)
     logging.info('============================================')
-    logging.info(f'     Running UJAV Version 0.0.0.1     ')
+    logging.info(f'     Running UJAV Version 0.0.0.2     ')
     logging.info('============================================')
     logging.info('')
 
@@ -598,6 +631,9 @@ if __name__ == '__main__':
     while not os.path.exists((dir_path)):
         print(f'Directory "{dir_path}" does not exist')
         dir_path = input("Enter Your Directory: ")
+    # validate path is complete
+    if dir_path[len(dir_path)-1] != '/':
+        dir_path += '/'
     count = 0
     skipped_count = 0
     # Iterate directory
