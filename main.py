@@ -408,7 +408,6 @@ def get_pondo_metadata(code):
 
     # set set and original set
     if spec_length > 2:
-        logging.warning(f'movie_spec {movie_spec[2]}')
         second_spec = movie_spec[2].text.strip()
         if len(second_spec) == 8 and second_spec[2] == ':' and second_spec[5] == ":":
             movie_spec.insert(2, "")
