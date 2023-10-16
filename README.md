@@ -22,6 +22,12 @@ ___I have literally never run this on another machine, so i have no idea if it w
   * Actor Thumbnail
   * Actor Profile
 * Source
+
+## Data Downloaded
+* Poster
+* Fanart (Background photo)
+* Additional Fanart
+* Trailer (only for Caribbean and Caribbean Premium)
   
 ## How to Use
 1. Ensure your files are all in the same folder, do not have them in subfolders
