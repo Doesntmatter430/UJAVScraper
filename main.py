@@ -7,6 +7,7 @@ import json
 import logging
 import logging.handlers
 import sys
+from titlecase import titlecase
 from logging import handlers
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -83,7 +84,7 @@ class JAVMetadata:
         self.images = []
 
 def get_carib_metadata(code):
-    logging.info(f'Getting Caribbean metadata for code {code}')
+    logging.info(f'[{count + skipped_count + duplicate_count + 1}] Getting Caribbean metadata for code {code}')
     jav = JAVMetadata
     en_expired = False
     #for some reason, the arrays don't clear when new data is populated
@@ -146,7 +147,7 @@ def get_carib_metadata(code):
         movie_info = en_movie_info
     #set title and original titles
     if movie_info.find('h1', itemprop="name") is not None:
-        jav.title = movie_info.find('h1', itemprop="name").text.strip()
+        jav.title = titlecase(movie_info.find('h1', itemprop="name").text.strip())
     if ja_movie_info.find('h1', itemprop="name") is not None:
         jav.original_title = ja_movie_info.find('h1', itemprop="name").text.strip()
     #set descriptions (need to translate later)
@@ -200,7 +201,7 @@ def get_carib_metadata(code):
     translator = Translator()
     if jav.title == jav.actors_string or jav.title == '':
         if jav.original_title != '':
-            jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip().capitalize()
+            jav.title = titlecase(translator.translate(jav.original_title, 'en', 'ja').text.strip())
     #translate description if default for untranslated descriptions
     if jav.original_description != '' and jav.description == "Caribbeancom has the widest selection of best looking Japanese and American girls getting fucked hardcore in every hole.The videos are extremely high quality - up to 4000kbps DVD quality, so it lets you jump right into the action and forget that you're just sitting in front of your computer screen!  With over 1000 titles to choose from and new movies updated 6 times a week, where else would you get your hands on fulfilling fantasy of fucking a petite babe with a tight snatch from the Far East?":
         jav.description = translator.translate(jav.original_description).text.strip()
@@ -210,9 +211,8 @@ def get_carib_metadata(code):
         jav.title = translator.translate(jav.title).text.strip()
         jav.description = translator.translate(jav.description).text.strip()
         for actor in jav.actors:
-            jav.actors[index] = translator.translate(actor).text.strip()
+            jav.actors[index] = titlecase(translator.translate(actor).text.strip())
             index += 1
-        #todo: make this a dictionary lookup
         index = 0
         for tag in jav.tags:
             jav.tags[index] = translator.translate(tag).text.strip()
@@ -221,12 +221,15 @@ def get_carib_metadata(code):
     # set filename
     jav.file_name = f'CARIB-{code}'
     #set folder name
-    jav.folder_name = f'{jav.title} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    jav.folder_name = f'{"".join([c for c in jav.title if c.isalpha() or c.isdigit() or c==" "]).rstrip()} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    if len(jav.folder_name):
+        jav.folder_name = jav.folder_name[0:254]
+
     return jav, True
 
 def get_carib_pr_metadata(code):
     code = code.replace("-", "_")
-    logging.info(f'Getting Caribbean PR metadata for code {code}')
+    logging.info(f'[{count + skipped_count + duplicate_count + 1}] Getting Caribbean PR metadata for code {code}')
     jav = JAVMetadata
     # for some reason, the arrays don't clear when new data is populated
     jav.images.clear()
@@ -256,7 +259,7 @@ def get_carib_pr_metadata(code):
     ##currently cant find a way to grab set because it is only on the ja side and has no itemprop or class
     # set title and original titles
     if en_movie_info.find('h1') is not None:
-        jav.title = en_movie_info.find('h1').text.strip()
+        jav.title = titlecase(en_movie_info.find('h1').text.strip())
     if ja_movie_info is not None:
         if ja_movie_info.find('h1') is not None:
             jav.original_title = ja_movie_info.find('h1').text.strip()
@@ -315,7 +318,7 @@ def get_carib_pr_metadata(code):
     translator = Translator()
     if jav.title == jav.actors_string or jav.title == '':
         if jav.original_title != '':
-            jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip().capitalize()
+            jav.title = titlecase(translator.translate(jav.original_title, 'en', 'ja').text.strip())
     # translate description if default for untranslated descriptions
     if jav.description == "Caribbeancom has the widest selection of best looking Japanese and American girls getting fucked hardcore in every hole.The videos are extremely high quality - up to 4000kbps DVD quality, so it lets you jump right into the action and forget that you're just sitting in front of your computer screen!  With over 1000 titles to choose from and new movies updated 6 times a week, where else would you get your hands on fulfilling fantasy of fucking a petite babe with a tight snatch from the Far East?":
         jav.description = translator.translate(jav.original_description).text.strip()
@@ -325,12 +328,15 @@ def get_carib_pr_metadata(code):
     # set filename
     jav.file_name = f'CARIBPR-{code}'
     # set folder name
-    jav.folder_name = f'{jav.title} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    jav.folder_name = f'{"".join([c for c in jav.title if c.isalpha() or c.isdigit() or c==" "]).rstrip()} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    if len(jav.folder_name):
+        jav.folder_name = jav.folder_name[0:254]
+
     return jav, True
 
 def get_pondo_metadata(code):
     code = code.replace("-", "_")
-    logging.info(f'Getting 1Pondo metadata for code {code}')
+    logging.info(f'[{count + skipped_count + duplicate_count + 1}] Getting 1Pondo metadata for code {code}')
     jav = JAVMetadata
     # for some reason, the arrays don't clear when new data is populated
     jav.images.clear()
@@ -373,7 +379,7 @@ def get_pondo_metadata(code):
     jav.studio = '1Pondo'
     # set title and original titles
     if en_movie_info.find('h1', class_='h1--dense') is not None:
-        jav.title = en_movie_info.find('h1', class_='h1--dense').text.strip()
+        jav.title = titlecase(en_movie_info.find('h1', class_='h1--dense').text.strip())
     if ja_movie_info.find('h1', class_='h1--dense') is not None:
         jav.original_title = ja_movie_info.find('h1', class_='h1--dense').text.strip()
 
@@ -444,7 +450,7 @@ def get_pondo_metadata(code):
     ##this is what carib does for untranslated titles
     translator = Translator()
     if jav.title == jav.actors_string:
-        jav.title = translator.translate(jav.original_title, 'en', 'ja').text.strip()
+        jav.title = titlecase(translator.translate(jav.original_title, 'en', 'ja').text.strip())
     # translate description if default for untranslated descriptions
     if jav.description == '':
         jav.description = translator.translate(jav.original_description).text.strip()
@@ -454,7 +460,9 @@ def get_pondo_metadata(code):
         # set filename
     jav.file_name = f'1Pondo-{code}'
     # set folder name
-    jav.folder_name = f'{jav.title} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    jav.folder_name = f'{"".join([c for c in jav.title if c.isalpha() or c.isdigit() or c==" "]).rstrip()} ({jav.file_name} - {jav.studio} - {jav.actors_string})'
+    if len(jav.folder_name):
+        jav.folder_name = jav.folder_name[0:254]
 
     #quit drivers
     en_driver.quit()
@@ -554,15 +562,19 @@ def create_NFO(JAVMetadata, directory):
 
     #Download images
     if len(JAVMetadata.images) > 0:
-        fanart = get_legacy_session().get(JAVMetadata.images[0]).content
-        a = open(os.path.join(directory, 'fanart.png'), 'wb')
-        a.write(fanart)
-        a.close()
+        image_session = get_legacy_session().get(JAVMetadata.images[0])
+        if image_session.status_code == 200:
+            fanart = image_session.content
+            a = open(os.path.join(directory, 'fanart.png'), 'wb')
+            a.write(fanart)
+            a.close()
     if len(JAVMetadata.images) > 1:
-        poster = get_legacy_session().get(JAVMetadata.images[1]).content
-        p = open(os.path.join(directory, 'poster.png'), 'wb')
-        p.write(poster)
-        p.close()
+        image_session = get_legacy_session().get(JAVMetadata.images[1])
+        if image_session.status_code == 200:
+            poster = image_session.content
+            p = open(os.path.join(directory, 'poster.png'), 'wb')
+            p.write(poster)
+            p.close()
 
     new_path = os.path.join(directory, 'fanart')
     if not os.path.exists(new_path):
@@ -570,11 +582,12 @@ def create_NFO(JAVMetadata, directory):
 
     length = len(JAVMetadata.images)
     for i in range (2, length):
-
-        bonus = get_legacy_session().get(JAVMetadata.images[i]).content
-        b = open(os.path.join(new_path, f'fanart{i}.png'), 'wb')
-        b.write(bonus)
-        b.close()
+        image_session = get_legacy_session().get(JAVMetadata.images[i])
+        if image_session.status_code == 200:
+            bonus = image_session.content
+            b = open(os.path.join(new_path, f'fanart{i}.png'), 'wb')
+            b.write(bonus)
+            b.close()
 
     #Download trailer
     if JAVMetadata.trailer != '':
@@ -590,7 +603,11 @@ def create_NFO(JAVMetadata, directory):
 
 def write_NFO(JAVMetadata, dir_path):
     new_path = os.path.join(dir_path, JAVMetadata.folder_name)
-    if not os.path.exists(new_path):
+
+    if os.path.exists(new_path):
+        logging.error(f'File Path {new_path} Already Exists. Skipping')
+        return False
+    else:
         os.mkdir(new_path)
 
     old_file_path = dir_path + file_name + '.' + extension
@@ -601,6 +618,8 @@ def write_NFO(JAVMetadata, dir_path):
     create_NFO(JAVMetadata, new_path)
     logging.info(f'Successfully Created NFO in {new_file_path}')
     logging.info('')
+
+    return True
 
 def create_with_tag(tag, value):
     if value != '':
@@ -629,13 +648,15 @@ if __name__ == '__main__':
     # directory/folder path
     dir_path = input("Enter Your Directory: ")
     while not os.path.exists((dir_path)):
-        print(f'Directory "{dir_path}" does not exist')
+        logging.warning(f'Directory "{dir_path}" does not exist')
         dir_path = input("Enter Your Directory: ")
     # validate path is complete
     if dir_path[len(dir_path)-1] != '/':
         dir_path += '/'
     count = 0
     skipped_count = 0
+    duplicate_count = 0
+    logging.info(f'{len(os.listdir(dir_path))} files found')
     # Iterate directory
     for file in os.listdir(dir_path):
         # check if current file_path is a file
@@ -670,8 +691,10 @@ if __name__ == '__main__':
                 result = get_carib_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -682,8 +705,10 @@ if __name__ == '__main__':
                 result = get_carib_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -694,8 +719,10 @@ if __name__ == '__main__':
                 result = get_carib_pr_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -706,8 +733,10 @@ if __name__ == '__main__':
                 result = get_carib_pr_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -718,8 +747,10 @@ if __name__ == '__main__':
                 result = get_pondo_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -730,8 +761,10 @@ if __name__ == '__main__':
                 result = get_pondo_metadata(code)
 
                 if result[1]:
-                    write_NFO(result[0], dir_path)
-                    count += 1
+                    if write_NFO(result[0], dir_path):
+                        count += 1
+                    else:
+                        duplicate_count += 1
                 else:
                     skipped_count += 1
                     logging.error(f'Failed to get results for {file_name}')
@@ -741,6 +774,7 @@ if __name__ == '__main__':
                 logging.info('')
 
     logging.info('============================================')
-    logging.info(f'     Successfully scraped {count} titles     ')
-    logging.info(f'           Skipped {skipped_count} titles     ')
+    logging.info(f'      Successfully scraped {count} title(s)     ')
+    logging.info(f'           {duplicate_count} Duplicate title(s)     ')
+    logging.info(f'            Skipped {skipped_count} title(s)     ')
     logging.info('============================================')
