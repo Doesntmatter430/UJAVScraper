@@ -19,9 +19,114 @@ from selenium.webdriver.common.by import By
 with open('tag_translation.json') as f:
     data = f.read()
     lookup_dict = json.loads(data)
-with open('series_translation.json') as f:
-    data = f.read()
-    set_lookup_dict = json.loads(data)
+
+set_lookup_dict = {
+    "オナニーで絶頂に達する瞬間に生挿入" : "Insert Big Cock Right Before Climax From Masturbation",
+    "この女、ふしだら" : "Naughty Woman",
+    "マンコ図鑑" : "Pussy Encyclopedia",
+    "女熱大陸" : "The Continent Full Of Hot Girls",
+    "ダイナマイト" : "Dynamite",
+    "朝から晩まで隙があったら即挿入" : "Fucking All Night Long If I Have A Chance",
+    "ネトラレ" : "Cuckold",
+    "洗練された大人のいやし亭" : "Luxury Adult Healing Spa",
+    "怒涛の連続挿入180分" : "Non Stop XXX for 180min",
+    "視界侵入！たちまち挿入！" : "Surprise Ambush",
+    "女優魂" : "The Soul Of Actress",
+    "いじられ続けてガチガチになるマゾ乳首" : "Getting Up Sensitive Masochist Nipples",
+    "大好きな挿入とおしゃぶりを繰り返す欲しがり女子" : "Alternated BJ And Insert",
+    "何度イっても終わらない！" : "Endless Orgasm",
+    "私のセックスを見てください！" : "Look At Me having SEX! and Jerk Off On My Face!",
+    "○○を手懐ける" : "Tame...",
+    "いい大人の預かり所" : "Adult Kindergarten",
+    "新入社員のお仕事" : "The Task of New Employee",
+    "痴漢電車" : "Orgy In The Train",
+    "ロリコン専用ソープらんど" : "Lolicon Soapland",
+    "蝶が如く" : "Like The Butterflies",
+    "僕の彼女が○○だったら" : "If My Girlfirend Is...",
+    "社長秘書のお仕事" : "Task of the President's Secretary",
+    "極上泡姫物語" : "The Story Of Luxury Spa Lady",
+    "ハウツー愛のあるセックスのあり方" : "Popular Japanese Porn Actor Will Tell You: How to Make Love in The Right Way",
+    "サマーヌード" : "Summer Nude",
+    "カリビアンキューティー" : "Caribbean Cutie",
+    "あまえんぼう" : "Sweet Girl",
+    "中出しサンタ" : "Creampie Santa Girl",
+    "美★ジーンズ" : "Jeans Beauty",
+    "アンソロジー" : "Anthology",
+    "アナル図鑑" : "Anal Encyclopedia",
+    "早抜きBEST" : "Quick Shooting: The Best Of",
+    "THE 未公開" : "The Undisclosed",
+    "セクシー女優エンサイクロペディア" : "Porn Star Encyclopedia",
+    "○○がぼくのお嫁さん" : "My Wife...",
+    "クレーム処理のOLにカラダで謝罪してもらいました！" : "Complaint Office Lady Apologize with the Body",
+    "〇〇を我慢できたら生中出し" : "Challenge...",
+    "AV女優をあなたの自宅に宅配！" : "Sending AV Actress To Your Home",
+    "カリビアン・ダイヤモンド" : "Caribbean Diamond",
+    "放課後に、仕込んでください" : "Special Lesson After School",
+    "童貞狩り" : "Virginity Hunter",
+    "着ハメCandy" : "Chaku-hame Candy",
+    "恍惚" : "The Ecstasy",
+    "ほんとにあったHな話" : "True Erotic Story",
+    "中出しいただくまで男の乳首を離しません" : "Licking His Nipples Until Cumshot Inside",
+    "いいなり慰み妻" : "Obedient Wife",
+    "夫の目の前で妻が" : "In Front of Her Husband",
+    "OLの尻に埋もれたい" : "Buried In Her Ass",
+    "制服美女倶楽部" : "School Uniform Club",
+    "極上セレブ婦人" : "Nicest Celeb Ladies",
+    "夏の想い出" : "Summer Memory",
+    "大人の日曜劇場" : "Adult Sunday Theater",
+    "禁じられた関係" : "Forbidden Correlation",
+    "家政婦はシた！" : "The Work Of A Maid",
+    "絶潮スプラッシュ" : "Ejaculation Splash",
+    "女王のソープ" : "Spa Queen",
+    "美微乳" : "Pretty Small Tits",
+    "サマーガールズ" : "Summer Girls",
+    "巨乳で痴女で絶品ボディの女たち" : "Big Tits Exquisite Body Sluts",
+    "女郎蜘蛛" : "Spider Tachibana",
+    "令嬢と召使" : "Ladyship And Servant",
+    "シェアガール" : "Share Girl",
+    "なすがまま" : "The Instinct in...",
+    "パシオン・アモローサ ～愛する情熱～" : "Passion And Amorosa",
+    "いきなり！ぶっかけ隊。" : "Suddenly Bukkake",
+    "見晴らし最高" : "The Best View Of...",
+    "清純エンジェル" : "Pure Angel",
+    "所持金ゼロ！目指せ○○！ヒッチハイク" : "Hitchhiking",
+    "恋オチ" : "Fall In Love",
+    "ローションエロダンス" : "Lotion Erotic Dance",
+    "パーフェクトボディ" : "Perfect Body",
+    "○○の家で撮影しちゃおう" : "Shoot In Her Home...",
+    "透けフェチ巨乳" : "Fetishism",
+    "僕のペット" : "My Adorable Pet",
+    "獄畜" : "Cornered Beast",
+    "アナル天使" : "Anal Angel",
+    "鬼イキトランス" : "Plunged Into Wild And Crazy Orgy",
+    "執事愛撫喫茶" : "Butler Caress Cafe",
+    "私の家で" : "At My Home",
+    "ふしだらの虜" : "Can't Help Being Dirty",
+    "初めてのＡＶ" : "My First Time Porn Filming",
+    "激乱交" : "Hard Orgy",
+    "密室凌辱" : "Humiliation In Secret Room",
+    "性欲処理マゾマスク" : "Masochism Mask",
+    "MMG・マジックミラーギロチン" : "Magic Mirror",
+    "FICAサッカーカリビアンコムカップ" : "FICA Soccer Caribbeancom Cup",
+    "血液型別SEX鑑定" : "Blood Type Interpret",
+    "実録投稿" : "True Story",
+    "かりのり" : "Karinori",
+    "ぶっかけ美熟女" : "Bukkake MILF",
+    "ザ・管理人" : "The Manager",
+    "団地妻のおもいきッて逆ナン" : "Wives Trying to Pick up",
+    "熟女ファイル" : "Mature File",
+    "女体観察" : "FBI: Female Body Inspection",
+    "カリVR" : "[VR]",
+    "竿美人" : "Shemale",
+    "鬼のドキュメンタリスト" : "The Demon Documentary",
+    "ドリームルームアニメーション" : "Dream Room Animation",
+    "縦型動画" : "Vertical Style Video",
+    "Debut" : "Debut",
+    "One more time, One more fuck" : "One More Time, One More Fuck",
+    "BOGA x BOGA" : "BOGA x BOGA",
+    "Time Fuck Bandits" : "Time Fuck Bandits",
+    "CRB48" : "CRB48"
+}
 
 ### Required to get legacy connection because server doesnt support "RFC 5746 secure renegotiation"
 class CustomHttpAdapter (requests.adapters.HTTPAdapter):
@@ -186,7 +291,7 @@ def get_carib_metadata(code):
         #set all other images
         if images_info.find_all('img', itemprop="thumbnail") is not None:
             all_images = images_info.find_all('img', itemprop="thumbnail")
-            for i in range(0,5):
+            for i in range(0, len(all_images)-1):
                 tag = all_images[i]
                 src = list(tag['src'])
                 src[30] = 'l'
@@ -303,7 +408,7 @@ def get_carib_pr_metadata(code):
         # set all other images
         if images_info.find_all('img', class_="gallery-image") is not None:
             all_images = images_info.find_all('img', class_="gallery-image")
-            for i in range(0, 3):
+            for i in range(0, len(all_images)-1):
                 tag = all_images[i]
                 src = list(tag['src'])
                 src[30] = 'l'
@@ -429,29 +534,33 @@ def get_pondo_metadata(code):
                     jav.tags.append(tag.text.title())
     # set poster
     jav.images.append(f'https://1pondo.tv/assets/sample/{code}/str.jpg')
-    for i in range(3):
-        jav.images.append(f'https://www.1pondo.tv/assets/sample/{code}/popu/{i+1}.jpg')
 
     if en_soup.find('div', class_='movie-gallery') is not None:
         images_info = en_soup.find('div', class_='movie-gallery')
         # set all other images
-        if images_info.find_all('img', class_="gallery-image-wrap") is not None:
-            all_images = images_info.find_all('img', class_="gallery-image-wrap")
-            if len(all_images)-1 >= 3:
-                for i in range(0, 3):
-                    tag = all_images[i]
-                    src = list(tag['src'])
-                    src[30] = 'l'
-                    img_url = 'https://en.caribbeancompr.com' + "".join(src)
+        if images_info.find_all('img', class_="gallery-image") is not None:
+            all_images = images_info.find_all('img', class_="gallery-image")
+            print(len(all_images)-1)
+            for i in range(0, len(all_images)-1):
+                tag = all_images[i]
+                src = list(tag['src'])
+                if 'thum' in "".join(src):
+                    jav.images.append(f'https://www.1pondo.tv/assets/sample/{code}/popu/{i + 1}.jpg')
+                else:
+                    img_url = 'https://1pondo.tv' + "".join(src)
+                    img_url = img_url.replace('__@120', '')
                     jav.images.append(img_url)
 
+
     # translate title if set to actor names
-    ##this is what carib does for untranslated titles
+    ##this is what pondo does for untranslated titles
     translator = Translator()
-    if jav.title == jav.actors_string:
+    if jav.title.replace(",", "") == jav.actors_string.replace(",", ""):
+        logging.info('Using Japanese Title Translation')
         jav.title = titlecase(translator.translate(jav.original_title, 'en', 'ja').text.strip())
     # translate description if default for untranslated descriptions
     if jav.description == '':
+        logging.info('Using Japanese Description Translation')
         jav.description = translator.translate(jav.original_description).text.strip()
     # translate set if needed
     if jav.set == '' and jav.original_set != '':
@@ -542,12 +651,15 @@ def create_NFO(JAVMetadata, directory):
         profile_url = f"https://sextb.net/actress/{actor.strip().replace(' ', '-')}"
         profile_response = get_legacy_session().get(profile_url)
         profile_soup = BeautifulSoup(profile_response.content, 'html.parser')
-        tag = profile_soup.find('img', class_="lazy")
-        f.write(indent + indent + create_with_tag('thumb', tag['data-src']))
-        f.write('\n')
-        f.write(indent + indent + create_with_tag('profile', profile_url))
-        f.write('\n')
-
+        #validate sextb
+        if profile_soup.find('img', class_="lazy") is not None:
+            tag = profile_soup.find('img', class_="lazy")
+            f.write(indent + indent + create_with_tag('thumb', tag['data-src']))
+            f.write('\n')
+            f.write(indent + indent + create_with_tag('profile', profile_url))
+            f.write('\n')
+        else:
+            logging.warning("sexTB is unavailable")
         f.write(indent + '</actor>')
         f.write('\n')
     #add source tag
@@ -682,8 +794,10 @@ if __name__ == '__main__':
             ##Check Pondo
             alias13 = "pondo-"
             alias14 = "1pondo-"
-            alias15 = "-pondo"
-            alias16 = "-1pondo"
+            alias15 = "1pon-"
+            alias16 = "-pondo"
+            alias17 = "-1pondo"
+            alias18 = "-1pon"
             code = ''
             if alias1 in file_name or alias2 in file_name or alias3 in file_name:
                 code = file_name[-10:]
@@ -741,7 +855,7 @@ if __name__ == '__main__':
                     logging.error(f'Failed to get results for {file_name}')
                 logging.info('')
 
-            elif alias13 in file_name or alias14 in file_name:
+            elif alias13 in file_name or alias14 in file_name or alias15 in file_name:
                 code = file_name[-10:]
                 result = get_pondo_metadata(code)
 
@@ -755,7 +869,7 @@ if __name__ == '__main__':
                     logging.error(f'Failed to get results for {file_name}')
                 logging.info('')
 
-            elif alias15 in file_name or alias16 in file_name:
+            elif alias16 in file_name or alias17 in file_name or alias18 in file_name:
                 code = file_name[:10]
                 result = get_pondo_metadata(code)
 
